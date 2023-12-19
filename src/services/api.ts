@@ -1,7 +1,10 @@
-import { toPairs } from "lodash";
-import "whatwg-fetch";
+import { toPairs } from 'lodash';
+import 'whatwg-fetch';
 
-const SPOTIFY_ROOT = "https://api.spotify.com/v1";
+const SPOTIFY_ROOT = 'https://api.spotify.com/v1';
+const SPOTIFY_AUTH_URL = 'https://accounts.spotify.com/api/token';
+const SPOTIFY_CLIENT_ID = 'ff517e55aeba40c3bef9f659974dd54e';
+const SPOTIFY_CLIENT_SECRET = '4d3ecb8332f14e39b0755b9ed3d57924';
 
 /**
  * Parses the JSON returned by a network request
@@ -47,16 +50,59 @@ export const request = (url: any, options?: any) => {
   return fetch(url, options).then(checkStatus).then(parseJSON);
 };
 
-const fetchFromSpotify = ({ token, endpoint, params }: any) => {
-  let url = [SPOTIFY_ROOT, endpoint].join("/");
+const headers = new Headers({
+  Authorization: 'Basic ' + btoa(`${SPOTIFY_CLIENT_ID}:${SPOTIFY_CLIENT_SECRET}`),
+  'Content-Type': 'application/x-www-form-urlencoded',
+});
+
+const body = new URLSearchParams();
+body.set('grant_type', 'client_credentials');
+
+const json = true;
+
+export const fetchToken = async () => {
+  return request(SPOTIFY_AUTH_URL, {
+    method: 'POST',
+    headers,
+    body,
+    json,
+  }).then((response: any) => {
+    return { access_token: response.access_token, expires_in: response.expires_in };
+  });
+};
+
+const fetchFromSpotify = async ({ token, endpoint, params }: any) => {
+  let url = [SPOTIFY_ROOT, endpoint].join('/');
   if (params) {
     const paramString = toPairs(params)
-      .map((param: any) => param.join("="))
-      .join("&");
+      .map((param: any) => param.join('='))
+      .join('&');
     url += `?${paramString}`;
   }
   const options = { headers: { Authorization: `Bearer ${token}` } };
   return request(url, options);
 };
 
-export default fetchFromSpotify;
+export const searchSpotifyByGenre = (token: string, genre: string) => {
+  return fetchFromSpotify({
+    token,
+    endpoint: 'search',
+    params: {
+      q: `genre:"${genre}"`,
+      type: 'artist',
+      limit: 50,
+    },
+  });
+};
+
+export const searchSpotifyByArtist = (token: string, artist: string) => {
+  return fetchFromSpotify({
+    token,
+    endpoint: 'search',
+    params: {
+      q: `artist:"${artist}"`,
+      type: 'track',
+      limit: 50,
+    },
+  });
+};
