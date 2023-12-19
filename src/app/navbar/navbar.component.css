@@ -1,0 +1,21 @@
+.container {
+  display: flex;
+  gap: 25px;
+  position: absolute;
+  right: 30px;
+  top: 30px;
+}
+
+p {
+  font-size: 24px;
+}
+
+a,
+a:visited,
+a:hover,
+a:active,
+a:focus,
+a:link {
+  color: #fff;
+  text-decoration: none;
+}
