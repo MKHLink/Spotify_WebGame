@@ -1,6 +1,6 @@
 <div class="scoreboard"> 
-    <div class="padder">
-        <div class="username">LEADERBOARD</div>
-        <div class="score">Score</div>
+    <div *ngFor="let item of fakeScoreboard" class="padder">
+        <div class="username">{{item.username}}</div>
+        <div class="score">{{item.score}}</div>
     </div>
 </div>
