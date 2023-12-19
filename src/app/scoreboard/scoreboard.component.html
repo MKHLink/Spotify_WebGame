@@ -1,6 +1,17 @@
-<div class="scoreboard"> 
-    <div *ngFor="let item of fakeScoreboard" class="padder">
-        <div class="username">{{item.username}}</div>
-        <div class="score">{{item.score}}</div>
+<div class="scoreboard">
+  <div class="scoreboard-title">
+    <h3>Leaderboard</h3>
+    <img src="assets/leaderboard.svg" alt="leaderboard" id="leaderboard-image" />
+  </div>
+  <div class="scoreboard-headers">
+    <h4>Usernames</h4>
+    <h4>Scores</h4>
+  </div>
+  <div *ngFor="let item of topTenScores; index as i" class="ranking">
+    <div class="scoreboard-item">
+      <div class="username">{{ item.username }}</div>
+      <div class="score">{{ item.score }}</div>
     </div>
+    <hr *ngIf="i < topTenScores.length - 1" class="divider" />
+  </div>
 </div>
