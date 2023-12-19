@@ -1,0 +1,34 @@
+.scoreboard {
+    width: 100%;
+    height: 80%;
+    background: #232323;
+    border-radius: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.padder {
+    padding: 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    width: 100%;
+}
+
+.username {
+    color: white;
+    font-size: 24px;
+    font-family: Inter;
+    font-weight: 400;
+    word-wrap: break-word;
+}
+
+.score {
+    color: white;
+    font-size: 24px;
+    font-family: Inter;
+    font-style: italic;
+    font-weight: 400;
+    word-wrap: break-word;
+}
