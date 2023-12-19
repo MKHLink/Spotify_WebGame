@@ -20,6 +20,8 @@ export class HomeComponent implements OnInit {
 
   token: string = '';
 
+  username: string = '';
+
   ngOnInit(): void {
     const tokenKey = localStorage.getItem(TOKEN_KEY);
     console.log('tokenKey: ', tokenKey);
