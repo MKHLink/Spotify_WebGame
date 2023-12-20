@@ -17,7 +17,11 @@
   </p>
   <br />
   <div class="username-input">
-    <app-text-input inputType="text" placeholder="Enter a username"></app-text-input>
+    <app-text-input
+      inputType="text"
+      placeholder="Enter a username"
+      (onInputChange)="receiveUsername($event)"
+    ></app-text-input>
   </div>
   <br />
   <app-scoreboard></app-scoreboard>
