@@ -4,6 +4,35 @@
   <br />
   <div class="settings-category">
     <h3 class="category-title">Choose Your Jams</h3>
-    <div></div>
+    <div class="buttons">
+      <button [ngClass]="[isCompletelyRandomBtnStyle]" (click)="handleButtonClick('completely-random')">
+        Completely Random
+      </button>
+      <button [ngClass]="[isBasedOnGenreBtnStyle]" (click)="handleButtonClick('based-on-genre')">
+        Based On A Genre
+      </button>
+      <button [ngClass]="[isBasedOnArtistBtnStyle]" (click)="handleButtonClick('based-on-artist')">
+        Based On An Artist
+      </button>
+    </div>
   </div>
+  <div *ngIf="isBasedOnGenre || isBasedOnArtist" class="settings-category">
+    <div *ngIf="isBasedOnGenre" class="settings-search-label">
+      <h3 class="category-title">Genre Mode</h3>
+      <p>Enter the name of the genre:</p>
+    </div>
+    <div *ngIf="isBasedOnArtist" class="settings-search-label">
+      <h3 class="category-title">Artist Mode</h3>
+      <p>Enter the name of the artist:</p>
+    </div>
+    <app-text-input
+      inputType="text"
+      placeholder="Enter your search"
+      [preexistingInputValue]="searchString"
+      (onInputChange)="receiveInput($event)"
+    ></app-text-input>
+  </div>
+  <br />
+  <app-scoreboard></app-scoreboard>
+  <br />
 </div>
