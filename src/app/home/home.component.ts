@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 // import fetchFromSpotify, { request } from '../../services/api';
-import { fetchToken, searchSpotifyByGenre, searchSpotifyByArtist } from 'src/services/api';
+import { fetchToken, getRandomSongs, searchSpotifyByGenre, searchSpotifyByArtist } from 'src/services/api';
 
 const TOKEN_KEY = 'whos-who-access-token';
 
@@ -32,10 +32,22 @@ export class HomeComponent implements OnInit {
       this.getSpotifyAuthToken();
     }
 
+    getRandomSongs(this.token).then((response: any) => {
+      console.log('Random songs: ', response);
+    });
+
     searchSpotifyByArtist(this.token, 'The Beatles').then((response: any) => {
       console.log('The Beatles search results: ', response);
     });
+
+    searchSpotifyByGenre(this.token, 'jazz').then((response: any) => {
+      console.log('Jazz search results: ', response);
+    });
   }
+
+  receiveUsername = (valueEmitted: string) => {
+    this.username = valueEmitted;
+  };
 
   getSpotifyAuthToken = () => {
     fetchToken().then(({ access_token, expires_in }: { access_token: string; expires_in: number }) => {

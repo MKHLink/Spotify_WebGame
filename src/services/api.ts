@@ -83,14 +83,49 @@ const fetchFromSpotify = async ({ token, endpoint, params }: any) => {
   return request(url, options);
 };
 
+const generateRandomString = () => {
+  const characters = 'abcdefghijklmnopqrstuvwxyz';
+  const randomCharacter = characters[Math.floor(Math.random() * characters.length)];
+  let randomString = '';
+  switch (Math.round(Math.random())) {
+    case 0:
+      randomString = randomCharacter + '%25';
+      break;
+    case 1:
+      randomString = '%25' + randomCharacter + '%25';
+      break;
+    default:
+      break;
+  }
+  return randomString;
+};
+
+const generateRandomOffset = () => Math.floor(Math.random() * 1000);
+
+export const getRandomSongs = (token: string) => {
+  return fetchFromSpotify({
+    token,
+    endpoint: 'search',
+    params: {
+      q: `track:"${generateRandomString()}"`,
+      type: 'track',
+      limit: 50,
+      offset: generateRandomOffset(),
+      market: 'US',
+    },
+  });
+};
+
 export const searchSpotifyByGenre = (token: string, genre: string) => {
   return fetchFromSpotify({
     token,
     endpoint: 'search',
     params: {
       q: `genre:"${genre}"`,
-      type: 'artist',
+      type: 'track',
       limit: 50,
+      offset: generateRandomOffset(),
+      market: 'US',
     },
   });
 };
@@ -103,6 +138,8 @@ export const searchSpotifyByArtist = (token: string, artist: string) => {
       q: `artist:"${artist}"`,
       type: 'track',
       limit: 50,
+      offset: generateRandomOffset(),
+      market: 'US',
     },
   });
 };
