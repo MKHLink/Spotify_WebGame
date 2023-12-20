@@ -49,6 +49,10 @@ export class HomeComponent implements OnInit {
     this.username = valueEmitted;
   };
 
+  submitUsername = () => {
+    console.log('Username: ', this.username);
+  };
+
   getSpotifyAuthToken = () => {
     fetchToken().then(({ access_token, expires_in }: { access_token: string; expires_in: number }) => {
       const token = {

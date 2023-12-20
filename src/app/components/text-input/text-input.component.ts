@@ -18,6 +18,8 @@ export class TextInputComponent implements OnInit {
 
   @Output() onInputChange: EventEmitter<string> = new EventEmitter<string>();
 
+  @Output() onEnter: EventEmitter<void> = new EventEmitter<void>();
+
   constructor() {}
 
   ngOnInit(): void {
@@ -28,5 +30,9 @@ export class TextInputComponent implements OnInit {
   setInputValue(value: string) {
     this.inputValue = value;
     this.onInputChange.emit(value);
+  }
+
+  handleEnter() {
+    this.onEnter.emit();
   }
 }

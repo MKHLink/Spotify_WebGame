@@ -1,15 +1,22 @@
 <div *ngIf="isTextType">
-  <input type="text" name="text-input" #textInput (keyup)="setInputValue(textInput.value)" />
+  <input
+    type="text"
+    name="text-input"
+    #textInput
+    [placeholder]="placeholder"
+    (keyup)="setInputValue(textInput.value)"
+    (keyup.enter)="onEnter.emit()"
+  />
 </div>
-<div>
-  *ngif="isNumberType"
+<div *ngif="isNumberType">
   <input
     type="number"
     min="0"
     max="100"
     name="text-input"
-    placeholder="placeholder"
+    [placeholder]="placeholder"
     #textInput
     (keyup)="setInputValue(textInput.value)"
+    (keyup.enter)="onEnter.emit()"
   />
 </div>
