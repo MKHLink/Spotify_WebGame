@@ -4,6 +4,7 @@
   <br />
   <p class="description">Earn points by guessing the popularity score of each song!</p>
   <br />
+  <div *ngIf="!showPlayer" class="container">
   <p class="description">
     <span class="primary-text">Spotify</span>&#39;s algorithm assigns each song a score from 0 to 100 and is based, in
     the most part, on the total number of plays the track has had and how recent those plays are. Generally speaking,
@@ -24,7 +25,32 @@
       (onEnter)="submitUsername()"
     ></app-text-input>
   </div>
+
   <br />
   <app-scoreboard></app-scoreboard>
   <br />
+</div>
+
+  <div *ngIf="showPlayer" class="container">
+    <div class="game-section">
+      <div class="music-player">
+        <img [src]="getCurrentSongAlbumCover()" alt="Album Cover" class="album-cover">
+        <div class="song-details">
+          <h3>{{getCurrentSongName()}}</h3>
+        <p>{{getCurrentSongArtist()}}</p>
+        </div>
+        <div class="music-controls">
+          <button class="control-button" (click)="play()">Play</button>
+          <button class="control-button" (click)="pause()">Pause</button>
+          <button class="control-button" (click)="nextSong()" >Next</button>
+        </div>
+      </div>
+  </div>
+
+  <br />
+  <app-scoreboard></app-scoreboard>
+  <br />
+
+ 
+ 
 </div>
