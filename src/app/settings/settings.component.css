@@ -12,3 +12,49 @@
   font-size: 48px;
   font-weight: 700;
 }
+
+.category-title {
+  padding-top: 30px;
+  font-size: 36px;
+  font-weight: 400;
+}
+
+.settings-search-label {
+  display: flex;
+  gap: 5px;
+  flex-direction: column;
+  padding-bottom: 5px;
+}
+
+.settings-search-label > p {
+  font-size: 16px;
+  font-weight: 400;
+  font-style: italic;
+}
+
+.buttons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 10px;
+}
+
+.btn {
+  text-align: center;
+  width: 30%;
+  height: 54px;
+  border-radius: 10px;
+  background-color: #232323;
+  border: none;
+  color: #fff;
+  font-size: 24px;
+}
+
+.btn:focus,
+.btn:active {
+  outline: 2px solid #1bd760;
+}
+
+.btn-primary {
+  background-color: #1bd760;
+}

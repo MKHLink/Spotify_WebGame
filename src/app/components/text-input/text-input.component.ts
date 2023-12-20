@@ -12,6 +12,8 @@ export class TextInputComponent implements OnInit {
 
   isNumberType: boolean = false;
 
+  @Input() preexistingInputValue: string = '';
+
   @Input() inputType: 'text' | 'number' = 'text';
 
   @Input() placeholder: string = '';
@@ -23,6 +25,7 @@ export class TextInputComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {
+    this.setInputValue(this.preexistingInputValue);
     this.isTextType = this.inputType === 'text';
     this.isNumberType = this.inputType === 'number';
   }

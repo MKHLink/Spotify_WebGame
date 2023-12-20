@@ -2,13 +2,14 @@
   <input
     type="text"
     name="text-input"
+    [value]="inputValue"
     #textInput
     [placeholder]="placeholder"
     (keyup)="setInputValue(textInput.value)"
     (keyup.enter)="onEnter.emit()"
   />
 </div>
-<div *ngif="isNumberType">
+<div *ngIf="isNumberType">
   <input
     type="number"
     min="0"
