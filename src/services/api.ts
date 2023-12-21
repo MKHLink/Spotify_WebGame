@@ -100,7 +100,7 @@ const generateRandomString = () => {
   return randomString;
 };
 
-const generateRandomOffset = () => Math.floor(Math.random() * 1000);
+const generateRandomOffset = () => Math.floor(Math.random() * 950);
 
 export const getRandomSongs = (token: string) => {
   return fetchFromSpotify({
