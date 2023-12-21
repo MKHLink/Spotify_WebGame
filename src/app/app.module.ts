@@ -9,6 +9,8 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { TextInputComponent } from './components/text-input/text-input.component';
 import { ScoreboardComponent } from './components/scoreboard/scoreboard.component';
 import { SettingsComponent } from './settings/settings.component';
+import { ScoreboardService } from 'src/services/ScoreboardService';
+import { ModalComponent } from './components/modal/modal.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -23,9 +25,10 @@ const routes: Routes = [
     TextInputComponent,
     ScoreboardComponent,
     SettingsComponent,
+    ModalComponent,
   ],
   imports: [BrowserModule, FormsModule, RouterModule.forRoot(routes)],
-  providers: [],
+  providers: [ScoreboardService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

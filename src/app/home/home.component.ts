@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { random } from 'lodash';
 // import fetchFromSpotify, { request } from '../../services/api';
 import { fetchToken, getRandomSongs, searchSpotifyByGenre, searchSpotifyByArtist } from 'src/services/api';
-import { Howl, Howler } from 'howler';
+import { Howl } from 'howler';
+import { ScoreboardService } from 'src/services/ScoreboardService';
+
+
 
 const TOKEN_KEY = 'whos-who-access-token';
 
@@ -15,6 +17,8 @@ export class HomeComponent implements OnInit {
   token: string = '';
 
   username: string = '';
+  userScore: number =0;
+  totalScore: number = 0;
 
   songs: any [] =[];
   currentSongIndex: number = 0;
@@ -25,7 +29,7 @@ export class HomeComponent implements OnInit {
   isBasedOnArtist: any;
   searchString: any;
 
-  constructor() {}
+  constructor(private scoreboardService: ScoreboardService) {}
 
   ngOnInit(): void {
     const tokenKey = localStorage.getItem(TOKEN_KEY);
@@ -142,6 +146,39 @@ export class HomeComponent implements OnInit {
       this.sound.pause();
     }
   }
+
+  submitGuess(): void {
+    if (this.sound && this.userScore >= 1 && this.userScore <= 100) {
+      const actualScore = this.songs[this.currentSongIndex]?.popularity || 0;
+      console.log("pop " + actualScore);
+  
+      let scoreDifference: number;
+  
+      if (this.userScore < actualScore) {
+        scoreDifference = Math.abs((this.userScore / actualScore) * 100);
+      } else {
+        scoreDifference = Math.abs((actualScore / this.userScore) * 100);
+      }
+  
+      this.totalScore += scoreDifference;
+      this.totalScore = Math.round(this.totalScore); 
+      console.log(`User's Score: ${this.totalScore}`);
+    }
+  }
+  
+
+  endGame(): void{
+    if (this.sound) {
+      this.sound.unload(); 
+    }
+    this.scoreboardService.addNewEntry(this.username, this.userScore);
+    this.showPlayer=false;
+  }
+
+handleEnterKey(): void {
+  this.nextSong();
+  this.submitGuess();
+}
 
   getSpotifyAuthToken = () => {
     fetchToken().then(({ access_token, expires_in }: { access_token: string; expires_in: number }) => {
