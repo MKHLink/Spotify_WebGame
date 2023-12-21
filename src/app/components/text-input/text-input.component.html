@@ -1,23 +1,9 @@
-<div *ngIf="isTextType">
-  <input
-    type="text"
-    name="text-input"
-    [value]="inputValue"
-    #textInput
-    [placeholder]="placeholder"
-    (keyup)="setInputValue(textInput.value)"
-    (keyup.enter)="onEnter.emit()"
-  />
-</div>
-<div *ngIf="isNumberType">
-  <input
-    type="number"
-    min="0"
-    max="100"
-    name="text-input"
-    [placeholder]="placeholder"
-    #textInput
-    (keyup)="setInputValue(textInput.value)"
-    (keyup.enter)="onEnter.emit()"
-  />
-</div>
+<input
+  type="text"
+  name="text-input"
+  [value]="inputValue"
+  #textInput
+  [placeholder]="placeholder"
+  (keyup)="setInputValue(textInput.value)"
+  (keyup.enter)="onEnter.emit()"
+/>
