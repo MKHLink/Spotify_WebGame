@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 
 @Component({
@@ -8,9 +8,15 @@ import { Component, OnInit, Inject } from '@angular/core';
 })
 export class ModalComponent implements OnInit {
 
+  @Input() username: string = '';
+  @Input() totalScore: number = 0;
+  @Input() onClose: () => void=()=> {};
   constructor() { }
 
   ngOnInit(): void {
   }
 
+  closeModal(): void{
+    this.onClose();
+  }
 }

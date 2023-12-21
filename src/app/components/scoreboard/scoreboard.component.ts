@@ -30,7 +30,7 @@ export class ScoreboardComponent implements OnInit {
       for (let i = this.scoreboard.length; i < 10; i++) {
         const fakeData = {
           username: faker.internet.userName(),
-          score: faker.number.int({ min: 1, max: 9000 }),
+          score: faker.number.int({ min: 1, max: 500 }),
         };
         this.scoreboard.push(fakeData);
       }
