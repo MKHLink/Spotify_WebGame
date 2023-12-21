@@ -44,14 +44,14 @@
           <button class="control-button" (click)="pause()">Pause</button>
           <button class="control-button" (click)="nextSong()" >Next</button>
         </div>
-        <div>
+        <div class="game">
           <input type="number" 
                placeholder="Enter your guess (1-100)"
                min="1" 
                max="100"
                required
              [(ngModel)]="userScore"
-             (keyup.enter)="nextSong()"
+             (keyup.enter)="handleEnterKey()"
         >
           <button (click)="endGame()">End Game</button>
         </div>

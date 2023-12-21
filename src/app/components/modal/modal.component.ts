@@ -7,7 +7,7 @@ import { Component, OnInit, Inject } from '@angular/core';
   styleUrls: ['./modal.component.css']
 })
 export class ModalComponent implements OnInit {
-  userScore: number = 0;
+
   constructor() { }
 
   ngOnInit(): void {
