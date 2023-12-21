@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { random } from 'lodash';
 // import fetchFromSpotify, { request } from '../../services/api';
 import { fetchToken, getRandomSongs, searchSpotifyByGenre, searchSpotifyByArtist } from 'src/services/api';
-import { Howl, Howler } from 'howler';
+import { Howl } from 'howler';
+import { ScoreboardService } from 'src/services/ScoreboardService';
+
 
 const TOKEN_KEY = 'whos-who-access-token';
 
@@ -15,6 +16,7 @@ export class HomeComponent implements OnInit {
   token: string = '';
 
   username: string = '';
+  userScore: number =0;
 
   songs: any [] =[];
   currentSongIndex: number = 0;
@@ -25,7 +27,7 @@ export class HomeComponent implements OnInit {
   isBasedOnArtist: any;
   searchString: any;
 
-  constructor() {}
+  constructor(private scoreboardService: ScoreboardService) {}
 
   ngOnInit(): void {
     const tokenKey = localStorage.getItem(TOKEN_KEY);
@@ -141,6 +143,21 @@ export class HomeComponent implements OnInit {
     if (this.sound && this.sound.playing()) {
       this.sound.pause();
     }
+  }
+
+  submitGuess():void{
+    if (this.sound && this.userScore >= 1 && this.userScore <= 100) {
+      const actualScore = this.songs[this.currentSongIndex]?.popularity || 0;
+      const scoreDifference = Math.abs(this.userScore - actualScore); 
+      const maxScore = 100; 
+      const score = Math.max(maxScore - scoreDifference, 0); 
+      this.userScore += score;
+      console.log(`User's Score: ${this.userScore}`);
+    } 
+  }
+
+  endGame(): void{
+    this.scoreboardService.addNewEntry(this.username, this.userScore);
   }
 
   getSpotifyAuthToken = () => {
