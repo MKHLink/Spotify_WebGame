@@ -111,35 +111,7 @@ export const getRandomSongs = (token: string) => {
       type: 'track',
       limit: 50,
       offset: generateRandomOffset(),
-      market: 'US',
-    },
-  });
-};
-
-export const searchSpotifyByGenre = (token: string, genre: string) => {
-  return fetchFromSpotify({
-    token,
-    endpoint: 'search',
-    params: {
-      q: `genre:"${genre}"`,
-      type: 'track',
-      limit: 50,
-      offset: generateRandomOffset(),
-      market: 'US',
-    },
-  });
-};
-
-export const searchSpotifyByArtist = (token: string, artist: string) => {
-  return fetchFromSpotify({
-    token,
-    endpoint: 'search',
-    params: {
-      q: `artist:"${artist}"`,
-      type: 'track',
-      limit: 50,
-      offset: generateRandomOffset(),
-      market: 'US',
+      // market: 'US',
     },
   });
 };

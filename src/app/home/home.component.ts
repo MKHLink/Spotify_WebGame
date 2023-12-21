@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 // import fetchFromSpotify, { request } from '../../services/api';
-import { fetchToken, getRandomSongs, searchSpotifyByGenre, searchSpotifyByArtist } from 'src/services/api';
+import { fetchToken, getRandomSongs } from 'src/services/api';
 import { Howl } from 'howler';
 import { ScoreboardService } from 'src/services/ScoreboardService';
 
@@ -16,22 +16,23 @@ export class HomeComponent implements OnInit {
 
   username: string = '';
   userScore: number = 0;
+  scoreDifference: number = 0;
   totalScore: number = 0;
 
   songs: any[] = [];
+  prevSongName: string = '';
   currentSongIndex: number = 0;
   sound: any;
   showPlayer: boolean = false;
   showModal: boolean = false;
 
-  isCompletelyRandom: any;
-  isBasedOnGenre: any;
-  isBasedOnArtist: any;
-  searchString: any;
+  isEndlessSongs: any;
+  isFiveSongs: any;
+  isTwentySongs: any;
 
   constructor(private scoreboardService: ScoreboardService) {}
 
-  ngOnInit(): void {
+  ngOnInit() {
     const tokenKey = localStorage.getItem(TOKEN_KEY);
 
     if (tokenKey) {
@@ -50,46 +51,32 @@ export class HomeComponent implements OnInit {
     const settings = localStorage.getItem('spotify-pop-quiz-settings');
     if (settings) {
       const parsedSettings = JSON.parse(settings);
-      this.isCompletelyRandom = parsedSettings.isCompletelyRandom;
-      this.isBasedOnGenre = parsedSettings.isBasedOnGenre;
-      this.isBasedOnArtist = parsedSettings.isBasedOnArtist;
-      this.searchString = parsedSettings.searchString;
+      this.isEndlessSongs = parsedSettings.isEndlessSongs;
+      this.isFiveSongs = parsedSettings.isFiveSongs;
+      this.isTwentySongs = parsedSettings.isTwentySongs;
     }
 
     // Fetch songs based on settings
+
     this.fetchSongs();
   }
 
-  //depending on the settings, uses the appropiate api
-  fetchSongs(): void {
+  fetchSongs = () => {
     if (this.token) {
-      if (this.isCompletelyRandom) {
-        getRandomSongs(this.token).then((response: any) => {
-          console.log('Random songs: ', response);
-          this.songs = [...this.songs, ...response.tracks.items.filter((track: any) => track.preview_url)];
-          // this.songs = response.tracks.items;
-          console.log(this.songs);
-        });
-      } else if (this.isBasedOnArtist) {
-        searchSpotifyByArtist(this.token, this.searchString).then((response: any) => {
-          console.log('Artist search results: ', response);
-          this.songs = [...this.songs, ...response.tracks.items.filter((track: any) => track.preview_url)];
-          // this.songs = response.tracks.items;
-          console.log(this.songs);
-        });
-      } else if (this.isBasedOnGenre) {
-        searchSpotifyByGenre(this.token, this.searchString).then((response: any) => {
-          console.log('Genre search results: ', response);
-          this.songs = [...this.songs, ...response.tracks.items.filter((track: any) => track.preview_url)];
-          // this.songs = response.tracks.items;
-          console.log(this.songs);
-        });
-      }
+      getRandomSongs(this.token).then((response: any) => {
+        this.songs = [...this.songs, ...response.tracks.items.filter((track: any) => track.preview_url)];
+        if (this.isFiveSongs) this.songs = this.songs.slice(0, 5);
+        if (this.isTwentySongs) this.songs = this.songs.slice(0, 20);
+      });
     }
-  }
+  };
 
   receiveUsername = (valueEmitted: string) => {
     this.username = valueEmitted;
+  };
+
+  receiveUserScore = (valueEmitted: number) => {
+    this.userScore = valueEmitted;
   };
 
   submitUsername = () => {
@@ -132,16 +119,17 @@ export class HomeComponent implements OnInit {
       this.sound.stop();
     }
 
+    this.prevSongName = this.getCurrentSongName();
+
     if (this.currentSongIndex < this.songs.length - 1) {
-      if (this.currentSongIndex > this.songs.length - 5) {
+      if (this.isEndlessSongs && this.currentSongIndex > this.songs.length - 5) {
         this.fetchSongs();
       }
       this.currentSongIndex++;
+      this.initializeSound();
     } else {
-      this.currentSongIndex = 0;
+      this.endGame();
     }
-
-    this.initializeSound();
   };
 
   play(): void {
@@ -158,19 +146,13 @@ export class HomeComponent implements OnInit {
 
   //this function calculates the accuracy of a player's guess and scores them based on it
   submitGuess(): void {
-    if (this.sound && this.userScore >= 1 && this.userScore <= 100) {
+    if (this.sound && this.userScore >= 0 && this.userScore <= 100) {
       const actualScore = this.songs[this.currentSongIndex]?.popularity || 0;
       console.log('pop ' + actualScore);
 
-      let scoreDifference: number;
+      this.scoreDifference = 100 - Math.abs(this.userScore - actualScore);
 
-      if (this.userScore < actualScore) {
-        scoreDifference = Math.abs((this.userScore / actualScore) * 100);
-      } else {
-        scoreDifference = Math.abs((actualScore / this.userScore) * 100);
-      }
-
-      this.totalScore += scoreDifference;
+      this.totalScore += this.scoreDifference;
       this.totalScore = Math.round(this.totalScore);
       console.log(`User's Score: ${this.totalScore}`);
     }
@@ -183,18 +165,21 @@ export class HomeComponent implements OnInit {
     this.scoreboardService.addNewEntry(this.username, this.totalScore);
 
     this.showModal = true;
+    this.showPlayer = false;
   }
 
   closeModal = (): void => {
     console.log('click!!');
     this.showModal = false;
     this.showPlayer = false;
+    this.username = '';
   };
 
   //this function is used by the html so that when a use enters a guess it auto plays the next song
   handleEnterKey(): void {
-    this.nextSong();
+    if (this.sound) this.sound.pause();
     this.submitGuess();
+    this.nextSong();
   }
 
   getSpotifyAuthToken = () => {

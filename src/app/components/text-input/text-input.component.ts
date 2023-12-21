@@ -8,13 +8,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 export class TextInputComponent implements OnInit {
   inputValue: string = '';
 
-  isTextType: boolean = true;
-
-  isNumberType: boolean = false;
-
   @Input() preexistingInputValue: string = '';
-
-  @Input() inputType: 'text' | 'number' = 'text';
 
   @Input() placeholder: string = '';
 
@@ -26,8 +20,6 @@ export class TextInputComponent implements OnInit {
 
   ngOnInit(): void {
     this.setInputValue(this.preexistingInputValue);
-    this.isTextType = this.inputType === 'text';
-    this.isNumberType = this.inputType === 'number';
   }
 
   setInputValue(value: string) {

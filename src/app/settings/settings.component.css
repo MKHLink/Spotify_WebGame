@@ -19,6 +19,11 @@
   font-weight: 400;
 }
 
+.category-description {
+  font-weight: 300;
+  font-style: italic;
+}
+
 .settings-search-label {
   display: flex;
   gap: 5px;
