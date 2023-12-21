@@ -24,6 +24,8 @@ export class HomeComponent implements OnInit {
   currentSongIndex: number = 0;
   sound:any;
   showPlayer: boolean = false;
+  showModal:boolean = false;
+
   isCompletelyRandom: any;
   isBasedOnGenre: any;
   isBasedOnArtist: any;
@@ -171,7 +173,14 @@ export class HomeComponent implements OnInit {
     if (this.sound) {
       this.sound.unload(); 
     }
-    this.scoreboardService.addNewEntry(this.username, this.userScore);
+    this.scoreboardService.addNewEntry(this.username, this.totalScore);
+    
+    this.showModal = true;
+  }
+
+  closeModal=(): void=>{
+    console.log('click!!');
+    this.showModal = false;
     this.showPlayer=false;
   }
 

@@ -1,4 +1,9 @@
 <div class="container">
+
+  <div *ngIf="showModal" >
+    <app-modal [username]="username" [totalScore]="totalScore" [onClose]="closeModal"></app-modal>
+  </div>
+
   <app-navbar></app-navbar>
   <h1 class="header"><span class="primary-text">Spotify</span>&nbsp;Pop(ularity) Quiz</h1>
   <br />
@@ -56,6 +61,8 @@
           <button (click)="endGame()">End Game</button>
         </div>
       </div>
+
+      
   </div>
   <br />
   <app-scoreboard></app-scoreboard>
