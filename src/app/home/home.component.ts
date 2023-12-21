@@ -62,6 +62,7 @@ export class HomeComponent implements OnInit {
     this.fetchSongs();
   }
   
+  //depending on the settings, uses the appropiate api
   fetchSongs(): void {
     if (this.token) {
       if (this.isCompletelyRandom) {
@@ -97,6 +98,7 @@ export class HomeComponent implements OnInit {
     this.initializeSound();
   };
 
+  //howler js function to play spotify previews
   initializeSound(): void {
     const previewUrl = this.songs[this.currentSongIndex]?.preview_url;
     if (previewUrl) {
@@ -111,6 +113,7 @@ export class HomeComponent implements OnInit {
     }
   }
 
+  //these three function binds the song details so they can be viewed real time
   getCurrentSongAlbumCover(): string {
     return this.songs[this.currentSongIndex]?.album?.images[0]?.url || 'default-cover.jpg';
   }
@@ -123,6 +126,7 @@ export class HomeComponent implements OnInit {
     return this.songs[this.currentSongIndex]?.artists[0]?.name || 'Unknown Artist';
   }
 
+  //skips to the next song
   nextSong = () => {
     if (this.sound) {
       this.sound.stop();
@@ -149,6 +153,7 @@ export class HomeComponent implements OnInit {
     }
   }
 
+  //this function calculates the accuracy of a player's guess and scores them based on it
   submitGuess(): void {
     if (this.sound && this.userScore >= 1 && this.userScore <= 100) {
       const actualScore = this.songs[this.currentSongIndex]?.popularity || 0;
@@ -184,6 +189,7 @@ export class HomeComponent implements OnInit {
     this.showPlayer=false;
   }
 
+  //this function is used by the html so that when a use enters a guess it auto plays the next song
 handleEnterKey(): void {
   this.nextSong();
   this.submitGuess();
