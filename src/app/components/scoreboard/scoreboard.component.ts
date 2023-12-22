@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { faker } from '@faker-js/faker';
-
+import { ScoreboardService } from 'src/services/ScoreboardService';
 
 @Component({
   selector: 'app-scoreboard',
@@ -12,14 +12,18 @@ export class ScoreboardComponent implements OnInit {
 
   topTenScores: any[] = [];
 
-  constructor() {}
+  constructor(private scoreboardService: ScoreboardService) {}
 
   ngOnInit(): void {
+    this.scoreboardService.scoreboard.subscribe((scoreboard) => {
+      this.scoreboard = scoreboard;
+      this.topTenScores = scoreboard.slice(0, 10);
+    });
     this.loadScoreboard();
-    this.topTenScores = this.scoreboard.slice(0, 10);
+    this.scoreboardService.setScoreboard(this.scoreboard);
   }
 
-  private loadScoreboard(): void {
+  loadScoreboard(): void {
     const storedData = localStorage.getItem('scoreboard');
 
     if (storedData) {
@@ -34,26 +38,30 @@ export class ScoreboardComponent implements OnInit {
         };
         this.scoreboard.push(fakeData);
       }
-
+      this.scoreboardService.setScoreboard(this.scoreboard);
       this.sortAndSaveScoreboard();
     }
   }
 
-  //function to sort data by score before saving
-  sortAndSaveScoreboard(): void {
-    this.scoreboard.sort((a, b) => b.score - a.score);
-    localStorage.setItem('scoreboard', JSON.stringify(this.scoreboard));
-  }
-
-  //function to add a new entry via other components, this function checks if the new entry's scroe is high enough to earn a place in the scoreboard
   addNewEntry(username: string, score: number): void {
+    const storedData = localStorage.getItem('scoreboard');
+    if (storedData) {
+      this.scoreboard = JSON.parse(storedData);
+    }
+
     const newEntry = {
       username: username,
       score: score,
     };
-
     this.scoreboard.push(newEntry);
+
     this.sortAndSaveScoreboard();
+  }
+
+  private sortAndSaveScoreboard(): void {
+    this.scoreboard.sort((a, b) => b.score - a.score);
     this.topTenScores = this.scoreboard.slice(0, 10);
+    this.scoreboardService.setScoreboard(this.scoreboard);
+    localStorage.setItem('scoreboard', JSON.stringify(this.scoreboard));
   }
 }

@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-number-input',
@@ -11,17 +11,13 @@ export class NumberInputComponent implements OnInit {
 
   @Input() control: FormControl = new FormControl();
 
-  preexistingInputValue: number = 0;
-
   @Input() placeholder: string = 'Enter a number';
 
   @Output() onInputChange: EventEmitter<number> = new EventEmitter<number>();
 
   @Output() onEnter: EventEmitter<void> = new EventEmitter<void>();
 
-  constructor() {
-    this.inputValue = this.preexistingInputValue;
-  }
+  constructor() {}
 
   ngOnInit(): void {}
 

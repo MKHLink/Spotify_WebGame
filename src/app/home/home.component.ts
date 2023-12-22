@@ -18,6 +18,7 @@ export class HomeComponent implements OnInit {
   userScore: number = 0;
   scoreDifference: number = 0;
   totalScore: number = 0;
+  scoreboard: any[] = [];
 
   songs: any[] = [];
   prevSongName: string = '';
@@ -47,6 +48,10 @@ export class HomeComponent implements OnInit {
       this.getSpotifyAuthToken();
     }
 
+    this.scoreboardService.scoreboard.subscribe((scoreboard) => {
+      this.scoreboard = scoreboard;
+    });
+
     // Fetch settings from localStorage
     const settings = localStorage.getItem('spotify-pop-quiz-settings');
     if (settings) {
@@ -57,7 +62,6 @@ export class HomeComponent implements OnInit {
     }
 
     // Fetch songs based on settings
-
     this.fetchSongs();
   }
 
@@ -91,8 +95,7 @@ export class HomeComponent implements OnInit {
       this.sound = new Howl({
         src: [previewUrl],
         html5: true,
-        onplay: () => {
-        },
+        onplay: () => {},
       });
       this.play();
     }
@@ -147,18 +150,37 @@ export class HomeComponent implements OnInit {
     if (this.sound && this.userScore >= 0 && this.userScore <= 100) {
       const actualScore = this.songs[this.currentSongIndex]?.popularity || 0;
       this.scoreDifference = 100 - Math.abs(this.userScore - actualScore);
-
       this.totalScore += this.scoreDifference;
       this.totalScore = Math.round(this.totalScore);
     }
+  }
+
+  addNewEntry(username: string, score: number): void {
+    const storedData = localStorage.getItem('scoreboard');
+    if (storedData) {
+      this.scoreboard = JSON.parse(storedData);
+    }
+
+    const newEntry = {
+      username: username,
+      score: score,
+    };
+    this.scoreboard.push(newEntry);
+
+    this.sortAndSaveScoreboard();
+  }
+
+  private sortAndSaveScoreboard(): void {
+    this.scoreboard.sort((a, b) => b.score - a.score);
+    this.scoreboardService.setScoreboard(this.scoreboard);
+    localStorage.setItem('scoreboard', JSON.stringify(this.scoreboard));
   }
 
   endGame(): void {
     if (this.sound) {
       this.sound.unload();
     }
-    this.scoreboardService.addNewEntry(this.username, this.totalScore);
-
+    this.addNewEntry(this.username, this.totalScore);
     this.showModal = true;
     this.showPlayer = false;
   }
@@ -167,6 +189,9 @@ export class HomeComponent implements OnInit {
     this.showModal = false;
     this.showPlayer = false;
     this.username = '';
+    this.songs = [];
+    this.fetchSongs();
+    this.currentSongIndex = 0;
   };
 
   //this function is used by the html so that when a use enters a guess it auto plays the next song

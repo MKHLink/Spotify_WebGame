@@ -8,7 +8,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 export class TextInputComponent implements OnInit {
   inputValue: string = '';
 
-  @Input() preexistingInputValue: string = '';
+  // @Input() preexistingInputValue: string = '';
 
   @Input() placeholder: string = '';
 
@@ -19,7 +19,7 @@ export class TextInputComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {
-    this.setInputValue(this.preexistingInputValue);
+    // this.setInputValue(this.preexistingInputValue);
   }
 
   setInputValue(value: string) {
