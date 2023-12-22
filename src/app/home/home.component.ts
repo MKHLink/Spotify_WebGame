@@ -80,7 +80,6 @@ export class HomeComponent implements OnInit {
   };
 
   submitUsername = () => {
-    console.log('Username: ', this.username);
     this.showPlayer = true;
     this.initializeSound();
   };
@@ -93,7 +92,6 @@ export class HomeComponent implements OnInit {
         src: [previewUrl],
         html5: true,
         onplay: () => {
-          console.log('Playing');
         },
       });
       this.play();
@@ -148,13 +146,10 @@ export class HomeComponent implements OnInit {
   submitGuess(): void {
     if (this.sound && this.userScore >= 0 && this.userScore <= 100) {
       const actualScore = this.songs[this.currentSongIndex]?.popularity || 0;
-      console.log('pop ' + actualScore);
-
       this.scoreDifference = 100 - Math.abs(this.userScore - actualScore);
 
       this.totalScore += this.scoreDifference;
       this.totalScore = Math.round(this.totalScore);
-      console.log(`User's Score: ${this.totalScore}`);
     }
   }
 
@@ -169,7 +164,6 @@ export class HomeComponent implements OnInit {
   }
 
   closeModal = (): void => {
-    console.log('click!!');
     this.showModal = false;
     this.showPlayer = false;
     this.username = '';
